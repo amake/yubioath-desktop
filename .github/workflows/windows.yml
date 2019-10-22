@@ -77,7 +77,8 @@ jobs:
           call C:\"Program Files (x86)\Microsoft Visual Studio"\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat x64
           windeployqt .\release\yubioath-desktop.exe --qmldir=qml --no-translations --angle --release
 
-      - name: Copy over files and create .zip archive
+      - name: Copy over files to release folder
+        shell: powershell
         run: |
           Copy-Item .\pymodules .\release -recurse
           Get-ChildItem -File -Include *.pyc -Recurse | Remove-Item -Force
@@ -85,13 +86,31 @@ jobs:
           Get-ChildItem -Include *.cpp -Recurse | Remove-Item -Force
           Get-ChildItem -Include *.obj -Recurse | Remove-Item -Force
 
+      - name: Create .zip artifact
+        shell: powershell
+        run: |
           $arr = $env:GITHUB_REF -split '/'
           $branch = $arr[2]
-
           7z a yubioath-desktop-$branch-win64.zip release
           mkdir deploy
           cp yubioath-desktop-$branch-win64.zip deploy
+
+      - name: Create an unsigned .msi installer package
+        shell: cmd
+        run: |
+          set PATH=%WIX%\bin;%PATH%
+          set SRCDIR=.\release\
+          heat dir .\release -out fragment.wxs -gg -scom -srd -sfrag -dr INSTALLDIR -cg ApplicationFiles -var env.SRCDIR
+          candle .\fragment.wxs .\resources\win\yubioath-desktop.wxs
+          light fragment.wixobj yubioath-desktop.wixobj -ext WixUIExtension -ext WixUtilExtension -o yubioath-desktop.msi
+          cp yubioath-desktop.msi deploy
+
+      - name: Rename installer
         shell: powershell
+        run: |
+          $arr = $env:GITHUB_REF -split '/'
+          $branch = $arr[2]
+          mv .\deploy\yubioath-desktop.msi .\deploy\yubioath-desktop-$branch-win64.msi
 
       - name: Run GUI
         shell: bash
