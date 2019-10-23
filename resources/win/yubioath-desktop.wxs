@@ -4,7 +4,7 @@
   <?define ProductName="Yubico Authenticator" ?>
 
    <Product Id="*" UpgradeCode="12345678-1234-1234-1234-111111111111" Name="$(var.ProductName)" Version="$(var.ProductVersion)" Manufacturer="Yubico Ab" Language="1033">
-      <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine"  Description="$(var.ProductName) $(var.ProductVersion)" />
+      <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" Description="$(var.ProductName) $(var.ProductVersion)" />
       <Media Id="1" Cabinet="yubioathdesktop.cab" EmbedCab="yes"/>
 
       <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
@@ -14,11 +14,11 @@
       </UI>
 
       <Directory Id="TARGETDIR" Name="SourceDir">
-        <Directory Id="ApplicationRoot" Name="Yubico">
-         <Directory Id="ProgramFilesFolder">
-            <Directory Id="INSTALLDIR" Name="Yubico Authenticator">
+         <Directory Id="ProgramFiles64Folder" Name="PFiles">
+            <Directory Id="YubicoDir" Name="Yubico">
+                <Directory Id="INSTALLDIR" Name="Yubico Authenticator">
+                </Directory>
             </Directory>
-          </Directory>
          </Directory>
       </Directory>
 
