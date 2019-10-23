@@ -105,6 +105,12 @@ jobs:
           light fragment.wixobj yubioath-desktop.wixobj -ext WixUIExtension -ext WixUtilExtension -o yubioath-desktop.msi
           cp yubioath-desktop.msi deploy
 
+      - name: Run installer
+        shell: cmd
+        run: |
+          msiexec /i yubioath-desktop.msi /quiet /l .\log.txt
+          cat .\log.txt
+
       - name: Rename installer
         shell: powershell
         run: |
