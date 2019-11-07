@@ -11,6 +11,10 @@
 
       <UI>
           <UIRef Id="WixUI_InstallDir" />
+          <Publish Dialog="ExitDialog"
+            Control="Finish" 
+            Event="DoAction" 
+            Value="LaunchApplication">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
       </UI>
 
       <Directory Id="TARGETDIR" Name="SourceDir">
@@ -25,5 +29,10 @@
       <Feature Id="DefaultFeature" Level="1">
          <ComponentGroupRef Id="ApplicationFiles"/>
       </Feature>
+
+      <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch Yubico Authenticator" />
+
+      <Property Id="WixShellExecTarget" Value="[#fil9AD596424AE112BC3458900952B5BE58]" />
+      <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
    </Product>
 </Wix>
