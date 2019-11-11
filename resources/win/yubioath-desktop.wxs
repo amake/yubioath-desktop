@@ -36,6 +36,18 @@
          </Directory>
       </Directory>
 
+      <CustomAction Id="RegisterEXE"
+                  Directory="INSTALLDIR"
+                  ExeCommand="&quot;vc_redist.x64.exe&quot; /q /norestart"
+                  Execute="deferred"
+                  Return="ignore"  
+                  Impersonate="no"
+                 />
+
+      <InstallExecuteSequence>
+        <Custom Action='RegisterEXE' After='InstallFiles' />
+      </InstallExecuteSequence>
+
       <Feature Id="DefaultFeature" Level="1">
          <ComponentGroupRef Id="ApplicationFiles"/>
       </Feature>
