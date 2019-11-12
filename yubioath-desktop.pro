@@ -38,16 +38,6 @@ QRC_JSON = resources.json
 # Generate first time
 system($$PYTHON_CMD build_qrc.py resources.json)
 
-# Install python dependencies with pip on mac and win
-win32|macx {
-    pip.target = pymodules
-    QMAKE_EXTRA_TARGETS += pip
-    PRE_TARGETDEPS += pymodules
-    QMAKE_CLEAN += -r pymodules
-}
-macx {
-    pip.commands = python3 -m venv pymodules && source pymodules/bin/activate && pip3 install -r requirements.txt && deactivate
-}
 !macx {
     pip.commands = pip3 install -r requirements.txt --target pymodules
 }
